@@ -3,267 +3,143 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Resistant Client</title>
+<title>Trident Client</title>
 
 <style>
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    overflow-x: hidden;
+    overflow: hidden;
     color: white;
-    background: #000;
+    background: linear-gradient(180deg, #00111f, #003a66, #00111f);
 }
 
-/* 🌊 CANVAS BACKGROUND */
-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: -2;
-}
-
-/* MAIN LAYOUT */
-.container {
-    display: flex;
-    height: 100vh;
-}
-
-/* SIDEBAR */
-.sidebar {
-    width: 240px;
-    background: rgba(10, 15, 28, 0.55);
-    backdrop-filter: blur(15px);
-    border-right: 1px solid rgba(0, 170, 255, 0.25);
-    padding: 20px;
-}
-
-/* LOGO */
-.logo {
-    font-size: 22px;
-    font-weight: bold;
-    color: #00aaff;
-    letter-spacing: 2px;
-    margin-bottom: 30px;
-}
-
-.nav-item {
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 12px;
-    cursor: pointer;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(0,170,255,0.15);
-    transition: 0.3s;
-}
-
-.nav-item:hover {
-    background: rgba(0,170,255,0.15);
-    border: 1px solid #00aaff;
-    transform: translateX(5px);
-}
-
-/* MAIN */
-.main {
-    flex: 1;
-    padding: 40px;
-    position: relative;
-}
-
-/* GLASS */
-.glass {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(0, 170, 255, 0.2);
-    backdrop-filter: blur(14px);
-    border-radius: 18px;
-    padding: 20px;
-}
-
-/* HEADER */
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-}
-
-.title {
-    font-size: 28px;
-    color: #00aaff;
-}
-
-/* BUTTON */
-.btn {
-    padding: 10px 18px;
-    border-radius: 12px;
-    border: 1px solid rgba(0,170,255,0.3);
-    background: rgba(0,0,0,0.3);
-    color: white;
-    cursor: pointer;
-}
-
-/* GRID */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-}
-
-/* DOWNLOAD */
-.download-btn {
-    padding: 14px 26px;
-    border-radius: 14px;
-    border: 1px solid #00aaff;
-    background: rgba(0,0,0,0.4);
-    color: white;
-    cursor: pointer;
-}
-
-/* 🌊 RIGHT SIDE TRIDENT */
-.trident-container {
+/* Animated ocean waves */
+.wave {
     position: absolute;
-    right: -40px;
+    width: 200%;
+    height: 200px;
+    bottom: 0;
+    left: 0;
+    background: url('https://svgshare.com/i/12XU.svg');
+    background-size: cover;
+    animation: waveMove 10s linear infinite;
+    opacity: 0.4;
+}
+
+.wave:nth-child(2) {
+    bottom: 10px;
+    opacity: 0.2;
+    animation-duration: 15s;
+}
+
+@keyframes waveMove {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* Main glass UI */
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    padding: 40px;
+    border-radius: 20px;
+    background: rgba(0, 40, 80, 0.35);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 0 40px rgba(0, 180, 255, 0.4);
+}
+
+/* Title */
+h1 {
+    font-size: 60px;
+    margin: 0;
+    color: #00d4ff;
+    text-shadow: 0 0 20px #00d4ff, 0 0 40px #0066ff;
+}
+
+p {
+    font-size: 18px;
+    opacity: 0.8;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    margin: 10px;
+    padding: 12px 25px;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+    box-shadow: 0 0 15px rgba(0, 200, 255, 0.5);
+}
+
+.btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
+}
+
+/* Floating trident */
+.trident {
+    position: absolute;
+    right: 80px;
     top: 50%;
     transform: translateY(-50%);
-    width: 320px;
-    filter: drop-shadow(0 0 25px #00aaff);
-    animation: float 4s ease-in-out infinite;
-    opacity: 0.9;
+    font-size: 120px;
+    color: #00e5ff;
+    text-shadow: 0 0 30px #00e5ff, 0 0 60px #0066ff;
+    animation: float 3s ease-in-out infinite;
 }
 
 @keyframes float {
-    0%, 100% { transform: translateY(-50%) translateX(0px); }
-    50% { transform: translateY(-52%) translateX(-10px); }
+    0%, 100% { transform: translateY(-50%) rotate(-5deg); }
+    50% { transform: translateY(-60%) rotate(5deg); }
 }
 
-.trident {
+/* Top navbar */
+.navbar {
+    position: absolute;
+    top: 0;
     width: 100%;
-    height: auto;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    background: rgba(0, 20, 40, 0.6);
+    backdrop-filter: blur(10px);
 }
 
-/* glow effect */
-.trident path {
-    fill: #00aaff;
-    filter: drop-shadow(0 0 20px #00aaff);
+.navbar span {
+    color: #00d4ff;
+    font-weight: bold;
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="waveCanvas"></canvas>
-
-<div class="container">
-
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-        <div class="logo">RESISTANT</div>
-        <div class="nav-item">Home</div>
-        <div class="nav-item">Downloads</div>
-        <div class="nav-item">Mods</div>
-        <div class="nav-item">Changelog</div>
-        <div class="nav-item">Support</div>
-    </div>
-
-    <!-- MAIN -->
-    <div class="main">
-
-        <!-- 🔱 TRIDENT -->
-        <div class="trident-container">
-            <svg class="trident" viewBox="0 0 200 600">
-                <path d="
-                M95 0
-                L105 0
-                L105 250
-                L150 180
-                L135 165
-                L105 220
-                L105 140
-                L135 110
-                L120 95
-                L105 120
-                L105 0
-                L95 0
-                L95 120
-                L80 95
-                L65 110
-                L95 140
-                L95 220
-                L65 165
-                L50 180
-                L95 250
-                Z
-                "/>
-                <path d="
-                M95 250
-                L105 250
-                L115 600
-                L85 600
-                Z
-                "/>
-            </svg>
-        </div>
-
-        <div class="header glass">
-            <div class="title">Download Hub</div>
-            <button class="btn">Check Updates</button>
-        </div>
-
-        <div class="grid">
-
-            <div class="glass">
-                <h2 style="color:#00aaff;">Resistant Client</h2>
-                <p>Latest version v1.0</p>
-                <button class="download-btn">Download Client</button>
-            </div>
-
-            <div class="glass">
-                <h3 style="color:#00aaff;">Features</h3>
-                <p>FPS boost tools<br>Clean UI overlay<br>Lightweight system</p>
-            </div>
-
-        </div>
-
-    </div>
+<div class="navbar">
+    <span>🌊 Trident Client</span>
+    <span>Atlantic Edition</span>
 </div>
 
-<!-- WAVE -->
-<script>
-const canvas = document.getElementById("waveCanvas");
-const ctx = canvas.getContext("2d");
+<div class="container">
+    <h1>TRIDENT CLIENT</h1>
+    <p>The ocean-powered Minecraft client experience</p>
 
-function resize(){
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-resize();
-window.addEventListener("resize", resize);
+    <a class="btn" href="#">Download</a>
+    <a class="btn" href="#">Mods</a>
+    <a class="btn" href="#">Support</a>
+</div>
 
-let time = 0;
+<div class="trident">🔱</div>
 
-function drawWave(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-
-    for(let i=0;i<5;i++){
-        ctx.beginPath();
-        let opacity = 0.03 + i*0.02;
-        ctx.strokeStyle = `rgba(0,170,255,${opacity})`;
-
-        for(let x=0;x<canvas.width;x++){
-            let y = canvas.height/2 +
-                Math.sin(x*0.008 + time + i)*60;
-
-            if(x===0) ctx.moveTo(x,y);
-            else ctx.lineTo(x,y);
-        }
-
-        ctx.stroke();
-    }
-
-    time += 0.02;
-    requestAnimationFrame(drawWave);
-}
-drawWave();
-</script>
+<div class="wave"></div>
+<div class="wave"></div>
 
 </body>
 </html>
