@@ -19,7 +19,7 @@ canvas {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: -1;
+    z-index: -2;
 }
 
 /* MAIN LAYOUT */
@@ -37,6 +37,7 @@ canvas {
     padding: 20px;
 }
 
+/* LOGO */
 .logo {
     font-size: 22px;
     font-weight: bold;
@@ -65,6 +66,7 @@ canvas {
 .main {
     flex: 1;
     padding: 40px;
+    position: relative;
 }
 
 /* GLASS */
@@ -97,12 +99,6 @@ canvas {
     background: rgba(0,0,0,0.3);
     color: white;
     cursor: pointer;
-    transition: 0.3s;
-}
-
-.btn:hover {
-    background: rgba(0,170,255,0.2);
-    box-shadow: 0 0 15px rgba(0,170,255,0.4);
 }
 
 /* GRID */
@@ -112,7 +108,7 @@ canvas {
     gap: 20px;
 }
 
-/* DOWNLOAD BUTTON */
+/* DOWNLOAD */
 .download-btn {
     padding: 14px 26px;
     border-radius: 14px;
@@ -120,25 +116,40 @@ canvas {
     background: rgba(0,0,0,0.4);
     color: white;
     cursor: pointer;
-    transition: 0.3s;
 }
 
-.download-btn:hover {
-    background: rgba(0,170,255,0.25);
-    box-shadow: 0 0 20px rgba(0,170,255,0.5);
-    transform: scale(1.05);
+/* 🌊 RIGHT SIDE TRIDENT */
+.trident-container {
+    position: absolute;
+    right: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 320px;
+    filter: drop-shadow(0 0 25px #00aaff);
+    animation: float 4s ease-in-out infinite;
+    opacity: 0.9;
 }
 
-.small {
-    color: #aaa;
-    font-size: 13px;
+@keyframes float {
+    0%, 100% { transform: translateY(-50%) translateX(0px); }
+    50% { transform: translateY(-52%) translateX(-10px); }
+}
+
+.trident {
+    width: 100%;
+    height: auto;
+}
+
+/* glow effect */
+.trident path {
+    fill: #00aaff;
+    filter: drop-shadow(0 0 20px #00aaff);
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🌊 WATER WAVE BACKGROUND -->
 <canvas id="waveCanvas"></canvas>
 
 <div class="container">
@@ -156,6 +167,42 @@ canvas {
     <!-- MAIN -->
     <div class="main">
 
+        <!-- 🔱 TRIDENT -->
+        <div class="trident-container">
+            <svg class="trident" viewBox="0 0 200 600">
+                <path d="
+                M95 0
+                L105 0
+                L105 250
+                L150 180
+                L135 165
+                L105 220
+                L105 140
+                L135 110
+                L120 95
+                L105 120
+                L105 0
+                L95 0
+                L95 120
+                L80 95
+                L65 110
+                L95 140
+                L95 220
+                L65 165
+                L50 180
+                L95 250
+                Z
+                "/>
+                <path d="
+                M95 250
+                L105 250
+                L115 600
+                L85 600
+                Z
+                "/>
+            </svg>
+        </div>
+
         <div class="header glass">
             <div class="title">Download Hub</div>
             <button class="btn">Check Updates</button>
@@ -165,10 +212,8 @@ canvas {
 
             <div class="glass">
                 <h2 style="color:#00aaff;">Resistant Client</h2>
-                <p class="small">Latest version v1.0</p>
-                <br>
+                <p>Latest version v1.0</p>
                 <button class="download-btn">Download Client</button>
-                <p class="small">Windows • Java Edition</p>
             </div>
 
             <div class="glass">
@@ -181,12 +226,12 @@ canvas {
     </div>
 </div>
 
-<!-- 🌊 WAVE SCRIPT -->
+<!-- WAVE -->
 <script>
 const canvas = document.getElementById("waveCanvas");
 const ctx = canvas.getContext("2d");
 
-function resize() {
+function resize(){
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 }
@@ -195,24 +240,20 @@ window.addEventListener("resize", resize);
 
 let time = 0;
 
-function drawWave() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+function drawWave(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
 
-    for (let i = 0; i < 5; i++) {
+    for(let i=0;i<5;i++){
         ctx.beginPath();
+        let opacity = 0.03 + i*0.02;
+        ctx.strokeStyle = `rgba(0,170,255,${opacity})`;
 
-        let opacity = 0.08 + i * 0.02;
-        ctx.strokeStyle = `rgba(0, 170, 255, ${opacity})`;
-        ctx.lineWidth = 2;
+        for(let x=0;x<canvas.width;x++){
+            let y = canvas.height/2 +
+                Math.sin(x*0.008 + time + i)*60;
 
-        for (let x = 0; x < canvas.width; x++) {
-            let y =
-                canvas.height / 2 +
-                Math.sin(x * 0.01 + time + i) * 40 +
-                Math.cos(x * 0.02 + time) * 20;
-
-            if (x === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
+            if(x===0) ctx.moveTo(x,y);
+            else ctx.lineTo(x,y);
         }
 
         ctx.stroke();
@@ -221,7 +262,6 @@ function drawWave() {
     time += 0.02;
     requestAnimationFrame(drawWave);
 }
-
 drawWave();
 </script>
 
